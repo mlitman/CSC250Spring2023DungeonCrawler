@@ -61,18 +61,26 @@ public class PlayerController : MonoBehaviour
             if(other.gameObject == this.northExit)
             {
                 MasterData.whereDidIComeFrom = "north";
+                SceneChangerScript gameManager = FindObjectOfType<SceneChangerScript>();
+                gameManager.LoadScene(other.gameObject.GetComponent<Dungeon>().sceneName);
             }
             else if (other.gameObject == this.southExit)
             {
                 MasterData.whereDidIComeFrom = "south";
+                SceneChangerScript gameManager = FindObjectOfType<SceneChangerScript>();
+                gameManager.LoadScene(other.gameObject.GetComponent<Dungeon>().sceneName);
             }
             else if (other.gameObject == this.eastExit)
             {
                 MasterData.whereDidIComeFrom = "east";
+                SceneChangerScript gameManager = FindObjectOfType<SceneChangerScript>();
+                gameManager.LoadScene(other.gameObject.GetComponent<Dungeon>().sceneName);
             }
             else if (other.gameObject == this.westExit)
             {
                 MasterData.whereDidIComeFrom = "west";
+                SceneChangerScript gameManager = FindObjectOfType<SceneChangerScript>();
+                gameManager.LoadScene(other.gameObject.GetComponent<Dungeon>().sceneName);
             }
             MasterData.isExiting = false;
             SceneManager.LoadScene("DungeonRoom");
