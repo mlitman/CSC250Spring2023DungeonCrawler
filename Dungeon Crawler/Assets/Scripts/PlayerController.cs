@@ -10,16 +10,12 @@ public class PlayerController : MonoBehaviour
     public GameObject westStart, eastStart, northStart, southStart;
     public float movementSpeed = 40.0f;
     private bool isMoving;
+    //***HOMEWORK 13***
+    private float fightProbability = 0.9f;
 
     // Start is called before the first frame update
     void Start()
     {
-        for(int i = 0; i < 10; i++)
-        {
-            print(Random.Range(1, 10));
-        }
-        
-
         this.updateExits();
 
         this.rb = this.GetComponent<Rigidbody>();
@@ -118,10 +114,20 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Room currentRoom = MasterData.p.getCurrentRoom();
+        //***HOMEWORK 13***
+        float randomValue = Random.value;
+
 
         if (Input.GetKeyDown(KeyCode.UpArrow) && this.isMoving == false)
         {
-            if (currentRoom.hasExit("north"))
+            //***HOMEWORK 13***
+            bool isThereFight = currentRoom.hasExit("north") && (Random.value < fightProbability);
+
+            if (isThereFight == true)
+            {
+                SceneManager.LoadScene("FightScene");
+            }
+            else if (currentRoom.hasExit("north"))
             {
                 currentRoom.takeExit(MasterData.p, "north");
                 this.rb.AddForce(this.northExit.transform.position * movementSpeed);
@@ -130,7 +136,14 @@ public class PlayerController : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.LeftArrow) && this.isMoving == false)
         {
-            if (currentRoom.hasExit("west"))
+            //***HOMEWORK 13***
+            bool isThereFight = currentRoom.hasExit("west") && (Random.value < fightProbability);
+
+            if (isThereFight == true)
+            {
+                SceneManager.LoadScene("FightScene");
+            }
+            else if (currentRoom.hasExit("west"))
             {
                 currentRoom.takeExit(MasterData.p, "west");
                 this.rb.AddForce(this.westExit.transform.position * movementSpeed);
@@ -139,7 +152,14 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.RightArrow) && this.isMoving == false)
         {
-            if (currentRoom.hasExit("east"))
+            //***HOMEWORK 13***
+            bool isThereFight = currentRoom.hasExit("east") && (Random.value < fightProbability);
+
+            if (isThereFight == true)
+            {
+                SceneManager.LoadScene("FightScene");
+            }
+            else if (currentRoom.hasExit("east"))
             {
                 currentRoom.takeExit(MasterData.p, "east");
                 this.rb.AddForce(this.eastExit.transform.position * movementSpeed);
@@ -148,7 +168,14 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.DownArrow) && this.isMoving == false)
         {
-            if (currentRoom.hasExit("south"))
+            //***HOMEWORK 13***
+            bool isThereFight = currentRoom.hasExit("south") && (Random.value < fightProbability);
+
+            if (isThereFight == true)
+            {
+                SceneManager.LoadScene("FightScene");
+            }
+            else if (currentRoom.hasExit("south"))
             {
                 currentRoom.takeExit(MasterData.p, "south");
                 this.rb.AddForce(this.southExit.transform.position * movementSpeed);
