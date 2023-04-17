@@ -3,11 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Monster : MonoBehaviour
 {
     private String monsterName;
     private Room currentRoom;
-    public float hitPoints;
+    public float monsterHitPoints;
+
+    void Start()
+    {
+        System.Random rand = new System.Random();
+        int randomNumber = rand.Next(11);
+        this.monsterHitPoints = randomNumber;
+    }
 
     public Monster(String name)
     {
