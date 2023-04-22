@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Exit
   - center
+  - Text Mesh Pro
   layers:
   - Default
   - TransparentFX

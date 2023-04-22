@@ -12,7 +12,7 @@ public class centerController : MonoBehaviour
         {
             Rigidbody rb = thePlayer.GetComponent<Rigidbody>();
             //rb.velocity = Vector3.zero;
-            thePlayer.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity); ;
+            thePlayer.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
         }
     }
 }

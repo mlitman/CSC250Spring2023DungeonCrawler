@@ -5,30 +5,22 @@ using UnityEngine.SceneManagement;
 
 public class MonsterTriggerScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public bool enableFights = true;
+    public float chanceToGetIntoFight = 10f;
 
     private void OnTriggerEnter(Collider other)
     {
-        int chanceToFight = Random.Range(1, 100);
-        if(chanceToFight <= 99)
+        if(this.enableFights == true)
         {
-            //print("Start a fight");
-            SceneManager.LoadScene("FightScene");
+            int chanceToFight = Random.Range(1, 100);
+            if (chanceToFight <= this.chanceToGetIntoFight)
+            {
+                SceneManager.LoadScene("FightScene");
+            }
+            else
+            {
+                print("No monsters found");
+            }
         }
-        else
-        {
-            print("No monsters found");
-        }
-
     }
 }

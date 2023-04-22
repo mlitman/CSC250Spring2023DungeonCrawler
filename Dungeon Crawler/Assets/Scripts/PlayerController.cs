@@ -10,8 +10,6 @@ public class PlayerController : MonoBehaviour
     public GameObject westStart, eastStart, northStart, southStart;
     public float movementSpeed = 40.0f;
     private bool isMoving;
-    //***HOMEWORK 13***
-    private float fightProbability = 0.9f;
 
     // Start is called before the first frame update
     void Start()

@@ -14,7 +14,7 @@ public class MasterData
             MasterData.cs = new Dungeon(100);
             MasterData.cs.populateCSDepartment();
 
-            MasterData.p = new Player("Mike");
+            MasterData.p = new Player("Nick");
             MasterData.cs.addPlayer(p);
             MasterData.isDungeonSetup = true;
         }
