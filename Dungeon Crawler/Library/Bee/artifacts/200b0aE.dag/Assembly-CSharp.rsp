@@ -346,6 +346,7 @@
 -r:"Library/Bee/artifacts/200b0aE.dag/UnityEngine.UI.ref.dll"
 "Assets/Scripts/centerController.cs"
 "Assets/Scripts/DungeonBackendCode/DeathMatch.cs"
+"Assets/Scripts/DungeonBackendCode/Dice.cs"
 "Assets/Scripts/DungeonBackendCode/Dungeon.cs"
 "Assets/Scripts/DungeonBackendCode/Exit.cs"
 "Assets/Scripts/DungeonBackendCode/Inhabitant.cs"

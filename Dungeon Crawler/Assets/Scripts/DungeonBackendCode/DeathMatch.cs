@@ -1,92 +1,110 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using TMPro;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
-public class DeathMatch : MonoBehaviour
+public class DeathMatch
 {
     private Inhabitant dude1;
     private Inhabitant dude2;
     private GameObject dude1GO;
     private GameObject dude2GO;
+    private Rigidbody currRigidBodyOfAttacker;
+    private float attackMoveDistance = 2.5f;
+    private Vector3 attackerOriginalPosition;
+    private Inhabitant currentAttacker;
+    private GameObject currentAttackerGO;
+    private Inhabitant currentTarget;
+    private GameObject currentTargetGO;
+    private MonoBehaviour refereeInstance;
 
-    public DeathMatch(Inhabitant dude1, Inhabitant dude2, GameObject dude1GO, GameObject dude2GO)
+    public DeathMatch(Inhabitant dude1, Inhabitant dude2, GameObject dude1GO, GameObject dude2GO, MonoBehaviour refereeInstance)
     {
         this.dude1 = dude1;
         this.dude2 = dude2;
+        this.dude1GO = dude1GO;
         this.dude2GO = dude2GO;
-        this.dude2GO = dude2GO;
+        this.currentAttacker = this.dude1;
+        this.currentAttackerGO = this.dude1GO;
+        this.currentTarget = this.dude2;
+        this.currentTargetGO = this.dude2GO;
+        this.refereeInstance = refereeInstance;
     }
 
-    public IEnumerator fight()
+    //this is basically a thread (like our worker bees from Java)
+    IEnumerator MoveObjectRoutine()
     {
-        //goes back and forth having our inhabitant try to attack each other
-        //a successful attack means that a D20 is at least as high as the target's AC
-        //upon successful attack, the target's HP reduce by the attacker's Attack
-        //an unsuccessful attack results in no change in HP
-        //go back and forth like this until an inhabitant dies
-        //Display initial stats
-        UpdateStats();
+        //yield return new WaitForSeconds(1.5f);
+        Vector3 originalPosition = this.attackerOriginalPosition;
+        Vector3 targetPosition = originalPosition + this.currentAttackerGO.transform.right * attackMoveDistance;
 
-        while (dude1.hp > 0 && dude2.hp > 0)
+        this.currRigidBodyOfAttacker.MovePosition(targetPosition);
+
+        yield return new WaitForSeconds(0.5f);
+
+        this.currRigidBodyOfAttacker.MovePosition(originalPosition);
+
+        //try to hit target here
+        if (Dice.roll(20) >= this.currentTarget.getAC())
         {
-            //I researched the yield return WaitForSeconds and Ienumerator as a solution to prevent
-            //the fight from taking place in an instant
-            yield return new WaitForSeconds(2f);
-
-            // Dude 1 attacks Dude 2
-            int attackRoll1 = dude1.RollD20();
-            int damage1 = 0;
-
-            if (attackRoll1 >= dude2.ac)
-            {
-                damage1 = dude1.RollAttack();
-                dude2.hp = dude2.hp - damage1;
-                damage1 = 0;
-                attackRoll1 = 0;
-            }
-
-            // Dude 2 attacks Dude 1
-            int attackRoll2 = dude2.RollD20();
-            int damage2 = 0;
-
-            if (attackRoll2 >= dude1.ac)
-            {
-                damage2 = dude2.RollAttack();
-                dude1.hp = dude1.hp - damage2;
-                damage2 = 0;
-                attackRoll2 = 0;
-
-                // Display stats after attack
-                UpdateStats();
-            }
-
-            DisplayEnding();
+            this.currentTarget.takeDamage(this.currentAttacker.getDamage());
         }
-    }
 
-    public void UpdateStats()
-    {
-        string dude1Stats = dude1.name + " / " + dude1.ac + " / " + dude1.hp + " / " + dude1.damage;
-        string dude2Stats = dude2.name + " / " + dude2.ac + " / " + dude2.hp + " / " + dude2.damage;
 
-        dude1GO.GetComponent<TextMeshPro>().SetText(dude1Stats);
-        dude2GO.GetComponent<TextMeshPro>().SetText(dude2Stats);
-    }
 
-    private void DisplayEnding()
-    {
-        if(dude1.hp > dude2.hp)
+        yield return new WaitForSeconds(0.5f);
+
+        //this.refereeInstance.BroadcastMessage("updateScore");
+        ((RefereeController)this.refereeInstance).updateScore();
+
+        if (this.currentTarget.isDead())
         {
-            print(dude1.name + " wins!!!");
+            // Get the Renderer component of the winner and change the Material to the green one
+            Renderer winnerRenderer = this.currentAttackerGO.GetComponent<Renderer>();
+            winnerRenderer.material = Resources.Load<Material>("Winner Material");
+
+            // Get the Renderer component of the loser and change the Material to the black one
+            Renderer loserRenderer = this.currentTargetGO.GetComponent<Renderer>();
+            loserRenderer.material = Resources.Load<Material>("Loser Material");
+
         }
         else
         {
-            print(dude2.name + " wins!!!");
+            //call the fight method again after this guy is done moving
+            this.fight();
         }
     }
 
+    public void fight()
+    {
+        //goes back and forth having our Inhabitant "try" to attack each other
+        //- a successful attack means that a D20 is at least as high as the targets AC
+        //-upon successful attack, the targets HP reduce by the attackers Attack
+        //-an unsuccessful attack results in no change in HP
+        //go back and forth like this until an inhabitant dies
+        //while(true)
+        //{
+        this.attackerOriginalPosition = this.currentAttackerGO.transform.position;
+        this.currRigidBodyOfAttacker = this.currentAttackerGO.GetComponent<Rigidbody>();
+        this.attackMoveDistance *= -1;
+
+        if (this.currentAttackerGO == this.dude1GO)
+        {
+            this.currentAttackerGO = this.dude2GO;
+            this.currentAttacker = this.dude2;
+            this.currentTarget = this.dude1;
+            this.currentTargetGO = this.dude1GO;
+        }
+        else
+        {
+            this.currentAttackerGO = this.dude1GO;
+            this.currentAttacker = this.dude1;
+            this.currentTarget = this.dude2;
+            this.currentTargetGO = this.dude2GO;
+        }
+
+        //non-blocking line of code
+        this.refereeInstance.StartCoroutine(MoveObjectRoutine());
+        //}
+
+    }
 }

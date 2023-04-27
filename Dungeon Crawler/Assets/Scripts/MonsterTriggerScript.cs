@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class MonsterTriggerScript : MonoBehaviour
 {
     public bool enableFights = true;
-    public float chanceToGetIntoFight = 10f;
+    public float chanceToGetIntoFight = 30f;
 
     private void OnTriggerEnter(Collider other)
     {

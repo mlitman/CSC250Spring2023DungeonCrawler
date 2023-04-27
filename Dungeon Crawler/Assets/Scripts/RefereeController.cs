@@ -2,30 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class RefereeController : MonoBehaviour
 {
-    private Monster theMonster;
     public GameObject monsterGO;
     public GameObject playerGO;
     public TextMeshPro monsterSB;
     public TextMeshPro playerSB;
+    private Monster theMonster;
     private DeathMatch theMatch;
 
-
+    // Start is called before the first frame update
     void Start()
     {
-        this.theMonster = new Monster("Monster");
+        this.theMonster = new Monster("goblin");
+        this.updateScore();
+        this.theMatch = new DeathMatch(MasterData.p, this.theMonster, this.playerGO, this.monsterGO, this);
+        StartCoroutine(DelayBeforeFight());
+    }
+
+    public void updateScore()
+    {
         this.monsterSB.text = this.theMonster.getData();
         this.playerSB.text = MasterData.p.getData();
-        this.theMatch = new DeathMatch(MasterData.p, this.theMonster, this.playerGO, this.monsterGO);
     }
 
-    void Update()
+    IEnumerator DelayBeforeFight()
     {
+        yield return new WaitForSeconds(0.5f);
+        this.theMatch.fight();
 
     }
-
 }
-

@@ -1,20 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+using System;
 
 public class Inhabitant
 {
-    //was listed as protected in class
-    public int hp;
-    public int ac;
-    public int damage;
-    public string name;
+    protected int hp;
+    protected int ac;
+    protected int damage;
+    protected string name;
 
     public Inhabitant(string name)
     {
         this.name = name;
-        System.Random r = new System.Random();
+        Random r = new Random();
         this.hp = r.Next(10, 21);
         this.ac = r.Next(10, 18);
         this.damage = r.Next(1, 6);
@@ -27,15 +23,23 @@ public class Inhabitant
         return s;
     }
 
-    //Homework 14 the dudes can now roll D20s and attacks
-    public int RollD20()
+    public bool isDead()
     {
-        return Random.Range(1, 20);
+        return this.hp <= 0;
     }
 
-    public int RollAttack()
+    public int getAC()
     {
-        return Random.Range(1, this.damage);
+        return this.ac;
     }
 
+    public int getDamage()
+    {
+        return this.damage;
+    }
+
+    public void takeDamage(int damage)
+    {
+        this.hp = this.hp - damage;
+    }
 }
