@@ -1,3 +1,7 @@
+using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class Inhabitant
@@ -6,11 +10,12 @@ public class Inhabitant
     protected int ac;
     protected int damage;
     protected string name;
+    private object transform;
 
     public Inhabitant(string name)
     {
         this.name = name;
-        Random r = new Random();
+        System.Random r = new System.Random();
         this.hp = r.Next(10, 21);
         this.ac = r.Next(10, 18);
         this.damage = r.Next(1, 6);
@@ -42,4 +47,26 @@ public class Inhabitant
     {
         this.hp = this.hp - damage;
     }
+
+    /*public void Bounce()
+    {
+        StartCoroutine(BounceRoutine());
+    }
+
+    private IEnumerator BounceRoutine()
+    {
+        float startingPosition = this.transform.position.y;
+        float timeToBounce = 0;
+        float bounceSpeed = 10.0f;
+        float bounceHeight = 5.0f;
+        while (timeToBounce > 0)
+        {
+            timeToBounce = Time.deltaTime * bounceSpeed;
+            //I found the Mathf.Lerp using a C# research tool
+            float newPosition = Mathf.Lerp(startingPosition, startingPosition + bounceHeight, timeToBounce);
+            this.transform.position = new Vector3(this.transform.position.x, newPosition, this.transform.position.z);
+            yield return null;
+        }
+    }*/
+
 }

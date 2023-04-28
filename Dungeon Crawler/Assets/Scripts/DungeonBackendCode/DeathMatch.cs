@@ -58,11 +58,10 @@ public class DeathMatch
 
         if (this.currentTarget.isDead())
         {
-            // Get the Renderer component of the winner and change the Material to the green one
+            //HOMEWORK 16
             Renderer winnerRenderer = this.currentAttackerGO.GetComponent<Renderer>();
             winnerRenderer.material = Resources.Load<Material>("Winner Material");
 
-            // Get the Renderer component of the loser and change the Material to the black one
             Renderer loserRenderer = this.currentTargetGO.GetComponent<Renderer>();
             loserRenderer.material = Resources.Load<Material>("Loser Material");
 
@@ -76,11 +75,6 @@ public class DeathMatch
 
     public void fight()
     {
-        //goes back and forth having our Inhabitant "try" to attack each other
-        //- a successful attack means that a D20 is at least as high as the targets AC
-        //-upon successful attack, the targets HP reduce by the attackers Attack
-        //-an unsuccessful attack results in no change in HP
-        //go back and forth like this until an inhabitant dies
         //while(true)
         //{
         this.attackerOriginalPosition = this.currentAttackerGO.transform.position;
