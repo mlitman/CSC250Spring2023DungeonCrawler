@@ -59,11 +59,22 @@ public class DeathMatch
         if (this.currentTarget.isDead())
         {
             //HOMEWORK 16
+            //Change the color of the loser to black and winner to green (as my player is round and the rotation doesn't show up)
+            //I chose this code as a visual alternative to the music
             Renderer winnerRenderer = this.currentAttackerGO.GetComponent<Renderer>();
+
             winnerRenderer.material = Resources.Load<Material>("Winner Material");
 
             Renderer loserRenderer = this.currentTargetGO.GetComponent<Renderer>();
+
             loserRenderer.material = Resources.Load<Material>("Loser Material");
+
+            // rotate the loser by 90 degrees around the y-axis and make the winner jump!
+            Transform loserTransform = currentTargetGO.GetComponent<Transform>();
+
+            currentAttackerGO.GetComponent<Rigidbody>().AddForce(Vector3.up * 750f);
+
+            loserTransform.Rotate(new Vector3(0, 45, 0));
 
         }
         else
