@@ -47,26 +47,4 @@ public class Inhabitant
     {
         this.hp = this.hp - damage;
     }
-
-    /*public void Bounce()
-    {
-        StartCoroutine(BounceRoutine());
-    }
-
-    private IEnumerator BounceRoutine()
-    {
-        float startingPosition = this.transform.position.y;
-        float timeToBounce = 0;
-        float bounceSpeed = 10.0f;
-        float bounceHeight = 5.0f;
-        while (timeToBounce > 0)
-        {
-            timeToBounce = Time.deltaTime * bounceSpeed;
-            //I found the Mathf.Lerp using a C# research tool
-            float newPosition = Mathf.Lerp(startingPosition, startingPosition + bounceHeight, timeToBounce);
-            this.transform.position = new Vector3(this.transform.position.x, newPosition, this.transform.position.z);
-            yield return null;
-        }
-    }*/
-
 }
