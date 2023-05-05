@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 
         if (!MasterData.whereDidIComeFrom.Equals("?"))
         {
-            if(MasterData.whereDidIComeFrom.Equals("north"))
+            if (MasterData.whereDidIComeFrom.Equals("north"))
             {
                 this.gameObject.transform.position = this.southExit.transform.position;
                 this.rb.AddForce(Vector3.forward * 150.0f);
@@ -42,14 +42,20 @@ public class PlayerController : MonoBehaviour
                 this.rb.AddForce(Vector3.right * 150.0f);
             }
         }
-        
-     
+        StartCoroutine(PlayerHeal());
+
+    }
+
+    IEnumerator PlayerHeal()
+    {
+        yield return new WaitForSeconds(3f);
+        MasterData.thePlayer.healHP(1);
+        StartCoroutine(PlayerHeal());
     }
 
     private void updateExits()
     {
-        Room currentRoom = MasterData.p.getCurrentRoom();
-
+        Room currentRoom = MasterData.thePlayer.getCurrentRoom();
         if (currentRoom.hasExit("north") == false)
         {
             this.northExit.SetActive(false);
@@ -66,13 +72,13 @@ public class PlayerController : MonoBehaviour
         {
             this.westExit.SetActive(false);
         }
-
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.CompareTag("center"))
+        if (other.gameObject.CompareTag("center"))
         {
+            MasterData.canGetIntoFight = true;
             this.rb.velocity = Vector3.zero;
             this.rb.Sleep();
             //this.rb.angularVelocity = Vector3.zero;
@@ -81,28 +87,12 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.CompareTag("Exit") && MasterData.isExiting)
+        if (other.gameObject.CompareTag("Exit") && MasterData.isExiting)
         {
-            if(other.gameObject == this.northExit)
-            {
-                MasterData.whereDidIComeFrom = "north";
-            }
-            else if (other.gameObject == this.southExit)
-            {
-                MasterData.whereDidIComeFrom = "south";
-            }
-            else if (other.gameObject == this.eastExit)
-            {
-                MasterData.whereDidIComeFrom = "east";
-            }
-            else if (other.gameObject == this.westExit)
-            {
-                MasterData.whereDidIComeFrom = "west";
-            }
             MasterData.isExiting = false;
             SceneManager.LoadScene("DungeonRoom");
         }
-        else if(other.gameObject.CompareTag("Exit") && !MasterData.isExiting)
+        else if (other.gameObject.CompareTag("Exit") && !MasterData.isExiting)
         {
             MasterData.isExiting = true;
         }
@@ -111,22 +101,26 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Room currentRoom = MasterData.p.getCurrentRoom();
+        Room currentRoom = MasterData.thePlayer.getCurrentRoom();
 
         if (Input.GetKeyDown(KeyCode.UpArrow) && this.isMoving == false)
         {
             if (currentRoom.hasExit("north"))
             {
-                currentRoom.takeExit(MasterData.p, "north");
+                currentRoom.takeExit(MasterData.thePlayer, "north");
+                MasterData.whereDidIComeFrom = "north";
+
                 this.rb.AddForce(this.northExit.transform.position * movementSpeed);
                 this.isMoving = true;
             }
         }
-        if(Input.GetKeyDown(KeyCode.LeftArrow) && this.isMoving == false)
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && this.isMoving == false)
         {
+
             if (currentRoom.hasExit("west"))
             {
-                currentRoom.takeExit(MasterData.p, "west");
+                currentRoom.takeExit(MasterData.thePlayer, "west");
+                MasterData.whereDidIComeFrom = "west";
                 this.rb.AddForce(this.westExit.transform.position * movementSpeed);
                 this.isMoving = true;
             }
@@ -135,7 +129,8 @@ public class PlayerController : MonoBehaviour
         {
             if (currentRoom.hasExit("east"))
             {
-                currentRoom.takeExit(MasterData.p, "east");
+                currentRoom.takeExit(MasterData.thePlayer, "east");
+                MasterData.whereDidIComeFrom = "east";
                 this.rb.AddForce(this.eastExit.transform.position * movementSpeed);
                 this.isMoving = true;
             }
@@ -144,7 +139,8 @@ public class PlayerController : MonoBehaviour
         {
             if (currentRoom.hasExit("south"))
             {
-                currentRoom.takeExit(MasterData.p, "south");
+                currentRoom.takeExit(MasterData.thePlayer, "south");
+                MasterData.whereDidIComeFrom = "south";
                 this.rb.AddForce(this.southExit.transform.position * movementSpeed);
                 this.isMoving = true;
             }

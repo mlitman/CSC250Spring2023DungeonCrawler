@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class DeathMatch
 {
@@ -33,7 +32,7 @@ public class DeathMatch
 
     private IEnumerator JumpCoroutine()
     {
-        float duration = 60f; // 1 minute
+        float duration = 5f; // 1 minute
         float speed = 5f;
         float startTime = Time.time;
         Vector3 startPosition = this.currentAttackerGO.transform.position;
@@ -77,20 +76,23 @@ public class DeathMatch
         {
             //what happens when our fight is over?
             //1. Make the dead guy fall over
+            MasterData.shouldFollowRotation = true;
             this.currentTargetGO.transform.Rotate(new Vector3(180, 0, 0));
+            MasterData.shouldFollowRotation = false;
+
 
             //2. Make the winner jump up and down
             this.refereeInstance.StartCoroutine(JumpCoroutine());
 
-            //3. Player Victory Music HOMEWORK 16
+            //3. Player Victory Music
             if (this.currentAttackerGO == this.dude1GO)
             {
-                WinnerMusic();
-                SceneManager.LoadScene("DungeonRoom");
+                ((RefereeController)this.refereeInstance).playWinnerMusic();
             }
             else
             {
-                SceneManager.LoadScene("GameOverScene");
+                //play sad game over
+                ((RefereeController)this.refereeInstance).playLoserMusic();
             }
 
 
@@ -104,6 +106,11 @@ public class DeathMatch
 
     public void fight()
     {
+        //goes back and forth having our Inhabitant "try" to attack each other
+        //- a successful attack means that a D20 is at least as high as the targets AC
+        //-upon successful attack, the targets HP reduce by the attackers Attack
+        //-an unsuccessful attack results in no change in HP
+        //go back and forth like this until an inhabitant dies
         //while(true)
         //{
         this.attackerOriginalPosition = this.currentAttackerGO.transform.position;
@@ -129,20 +136,5 @@ public class DeathMatch
         this.refereeInstance.StartCoroutine(MoveObjectRoutine());
         //}
 
-    }
-
-    //HOMEWORK 16
-    private IEnumerator WinnerMusic()
-    {
-        float duration = 5f; // 5 seconds
-        float startTime = Time.time;
-        Vector3 startPosition = this.currentAttackerGO.transform.position;
-
-        while (Time.time - startTime < duration)
-        {
-            ((RefereeController)this.refereeInstance).playWinnerMusic();
-        }
-
-        yield return null;
     }
 }
