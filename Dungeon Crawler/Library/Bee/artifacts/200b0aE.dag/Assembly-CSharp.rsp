@@ -363,6 +363,7 @@
 "Assets/Scripts/DungeonBackendCode/Room.cs"
 "Assets/Scripts/DungeonSetup.cs"
 "Assets/Scripts/Follow.cs"
+"Assets/Scripts/healthBarController.cs"
 "Assets/Scripts/MasterData.cs"
 "Assets/Scripts/MonsterTrigger.cs"
 "Assets/Scripts/MusicLooper.cs"
